@@ -7,6 +7,6 @@ VALUES  ('CEO', 1000000, 1),
         ('Head of HR', 50000, 2);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES  ('Freddie', 'Mercury', 1, null),
+VALUES  ('Freddie', 'Mercury', 1, 1),
         ('Bon', 'Jovi', 3, 1),
-        ('Bruce', 'Springsteen', 2, null);
+        ('Bruce', 'Springsteen', 2, 1);

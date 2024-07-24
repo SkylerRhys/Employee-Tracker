@@ -1,5 +1,24 @@
-const {selectDepartments, selectRoles} = require('./routes/index');
+const {programResponse} = require('./routes/index');
+const inquirer = require('inquirer');
+const {choices} = require('./utils/index.js');
 
-selectDepartments();
+const question = [
+    {
+        type: "list",
+        message: "What would you like to do?",
+        name: "userChoice",
+        choices: choices,
+    }
+];
 
-selectRoles();
+const init = () => {
+    inquirer
+    .prompt(
+        question
+    )
+    .then(response => {
+        programResponse(response.userChoice, init);
+    })
+};
+
+init();
