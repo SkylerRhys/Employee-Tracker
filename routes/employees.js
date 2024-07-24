@@ -62,6 +62,45 @@ const addEmployee = (init) => {
 };
 
 // Update an Employee
-const updateEmployee = (init) => {}
+const updateEmployee = (init) => {
+    pool.query('SELECT title FROM role', function (err, { rows }) {
+        const jobTitle = rows.map(job => job.title);
+        pool.query('SELECT first_name, last_name FROM employee', function (err, { rows }) {
+            const employees = rows.map(employee => `${employee.first_name} ${employee.last_name}`);
+            inquirer
+            .prompt(
+                [
+                    {
+                        type: "list",
+                        message: "Which employee do you want to update?",
+                        name: "employee",
+                        choices: employees,
+                    },
+                    {
+                        type: "list",
+                        message: "What is this employee's new role?",
+                        name: "newRole",
+                        choices: jobTitle,
+                    },
+                ]
+            )
+            .then(response => {
+                const employeeArray = response.employee.split(' ');
+                pool.query('SELECT id FROM employee WHERE first_name = $1 AND last_name = $2', employeeArray, function (err, { rows }) {
+                    const employeeId = rows[0].id;
+                    // console.log(`employee id is ${employeeId}`);
+                    pool.query('SELECT id FROM role WHERE title = $1', [response.newRole], function (err, { rows }) {
+                        const roleId = rows[0].id;
+                        // console.log(`role id is ${roleId}`);
+                        pool.query('UPDATE employee SET role_id = $1 WHERE id = $2', [roleId, employeeId], function (err, { rows }) {
+                            console.log('Success');
+                            init();
+                        })
+                    })
+                })
+            })
+        })
+    })
+}
 
 module.exports = {selectEmployees, addEmployee, updateEmployee};

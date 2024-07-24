@@ -12,7 +12,7 @@ const selectRoles = (init) => {
 // Add a Role
 const addRole = (init) => {
     pool.query('SELECT name FROM department', function (err, { rows }) {
-        console.log(rows);
+        // console.log(rows);
         inquirer
         .prompt(
             [
